@@ -4,6 +4,7 @@ import argparse
 import datetime
 import sys
 
+from grapher import draw_weeks
 from speleologist import dig
 from util import date_from_key
 from util import date_to_key
@@ -48,10 +49,13 @@ def distill_to_weeks(days):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-a", "--author", dest="author", action="append", nargs="+",
-                        help="The author(s) to look for")
-    parser.add_argument("-r", "--repo", dest="repos", action="append", nargs="+",
-                        help="The repository(ies) where to look")
+    parser.add_argument("-a", "--author", dest="author", action="append",
+                        nargs="+", help="The author(s) to look for")
+    parser.add_argument("-r", "--repo", dest="repos", action="append",
+                        nargs="+", help="The repository(ies) where to look")
+    parser.add_argument("-o", "--output", dest="output", action="store",
+                        nargs="?", help="The name of the output file",
+                        default="stats.html")
     args = parser.parse_args()
 
     SHOULD_ABORT = False
@@ -70,6 +74,4 @@ if __name__ == "__main__":
         for repo in flatten(args.repos):
             dig(accumulator, author, repo)
     weeks = distill_to_weeks(accumulator)
-    print(weeks)
-
-    # make_graph(days, weeks)
+    draw_weeks(weeks, args.output)
