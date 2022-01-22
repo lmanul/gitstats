@@ -75,3 +75,4 @@ if __name__ == "__main__":
             dig(accumulator, author, repo)
     weeks = distill_to_weeks(accumulator)
     draw_weeks(weeks, args.output)
+    print("You can now open '" + args.output + "' in your browser.")

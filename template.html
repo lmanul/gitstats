@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <script>{{CHART_JS}}</script>
+    <script>const weeks = '{{WEEKS}}';</script>
+  </head>
+  <body>
+    <div class="chart"><canvas id="weeks"></canvas></div>
+
+    <script>
+
+      var config = {
+        type: 'line',
+        options: {
+          responsive: true,
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+          },
+          hover: {
+            mode: 'index',
+            intersect: false
+          },
+          scales: {
+            yAxes: [
+              {position: 'left',  id: 'y1'},
+              {position: 'right', id: 'y2'},
+            ]
+          }
+        }
+      }
+
+      let ctx_weeks = document.getElementById('weeks').getContext('2d');
+      let cfg_weeks = JSON.parse(JSON.stringify(config))
+      let week_labels = [];
+      let cls = [];
+      let ins = [];
+      let dels = [];
+      let lines = [];
+      let data_points = weeks.split('|');
+      for (let i = 0, data_point; data_point = data_points[i]; i++) {
+        const parts = data_point.split(':');
+        week_labels.push(parts[0]);
+        cls.push(parts[1]);
+        ins.push(parts[2]);
+        dels.push(parts[3]);
+        lines.push('' + (parseInt(parts[2]) + parseInt(parts[3])))
+      }
+      cfg_weeks.data = {
+        labels: week_labels,
+        datasets: [
+          {label: 'Commits',   borderColor: '#ffd300', backgroundColor: '#fff0', data: cls,   yAxisID: 'y2'},
+          {label: '+ & -', borderColor: '#0074dc', backgroundColor: '#fff0', data: lines,   yAxisID: 'y1'},
+          {label: '+',     borderColor: '#26e400', backgroundColor: '#fff0', data: ins,   yAxisID: 'y1'},
+          {label: '-',     borderColor: '#d80000', backgroundColor: '#fff0', data: dels, yAxisID: 'y1'}]};
+      new Chart(ctx_weeks, cfg_weeks)
+
+    </script>
+  </body>
+</html>
