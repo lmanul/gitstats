@@ -8,3 +8,7 @@ A tool to show statistics for a given author on a git repository
 
 Note that you can specify several authors and/or several repositories: all the
 stats will be added.
+
+## Credits
+
+The produced graphs use the [https://www.chartjs.org/](Chart JS) library.
