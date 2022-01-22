@@ -11,4 +11,4 @@ stats will be added.
 
 ## Credits
 
-The produced graphs use the [https://www.chartjs.org/](Chart JS) library.
+The produced graphs use the [Chart JS](https://www.chartjs.org/) library.
