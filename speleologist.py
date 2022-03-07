@@ -28,7 +28,7 @@ def dig(accumulator, author, repo):
     os.chdir(repo)
     os.system("git checkout master")
     raw = subprocess.check_output(shlex.split("git log --author=" + author + " "
-                                              "--stat")).decode()
+                                              "--stat")).decode("utf8")
     day = None
     insertions = 0
     deletions = 0
