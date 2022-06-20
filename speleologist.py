@@ -12,18 +12,26 @@ INS_DEL_PATTERN = re.compile(r".*changed, (\d+) insertion?.*, (\d+) deletion.*")
 INS_PATTERN = re.compile(r".*changed, (\d+) insertion?.*")
 DEL_PATTERN = re.compile(r".*changed, (\d+) deletion.*")
 
+# Print some colors without having to depend on a module
+GREEN_FG =  '\033[32m'
+CYAN_FG = '\033[36m'
+RESET = '\033[m' # reset to the defaults
+
 def close_current_commit(days, day, insertions, deletions, ignore_this_commit):
     if ignore_this_commit:
-        return
+        return 0
     if day is not None:
         if day not in days:
             days[day] = [0, 0, 0]
         days[day][0] += 1
         days[day][1] += insertions
         days[day][2] += deletions
+        return 1
+    return 0
 
 def dig(accumulator, author, repo):
-    print("Looking for commits by '" + author + "' in " + repo)
+    total_commits = 0
+    print(GREEN_FG + "Looking for commits by '" + author + "' in " + repo + RESET)
     orig_dir = os.getcwd()
     os.chdir(repo)
     os.system("git checkout master")
@@ -61,8 +69,9 @@ def dig(accumulator, author, repo):
             if ignore_this_commit:
                 ignore_this_commit = False
                 continue
-            close_current_commit(accumulator, day, insertions, deletions,
-                                 ignore_this_commit)
-    close_current_commit(accumulator, day, insertions, deletions,
-                         ignore_this_commit)
+            total_commits += close_current_commit(
+                accumulator, day, insertions, deletions, ignore_this_commit)
+    total_commits += close_current_commit(accumulator, day, insertions, deletions,
+                                          ignore_this_commit)
+    print(CYAN_FG + "Found " + str(total_commits) + " commits." + RESET)
     os.chdir(orig_dir)
