@@ -4,7 +4,7 @@ import argparse
 import datetime
 import sys
 
-from grapher import draw_weeks
+from grapher import draw_weeks_and_quarters
 from speleologist import dig
 from util import date_from_key
 from util import date_to_key
@@ -47,6 +47,10 @@ def distill_to_weeks(days):
         current_monday = current_monday + datetime.timedelta(days=7)
     return weeks
 
+def distill_to_quarters(days):
+    quarters = {}
+    return quarters
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--author", dest="author", action="append",
@@ -74,5 +78,6 @@ if __name__ == "__main__":
         for repo in flatten(args.repos):
             dig(accumulator, author, repo)
     weeks = distill_to_weeks(accumulator)
-    draw_weeks(weeks, args.output)
+    quarters = distill_to_quarters(accumulator)
+    draw_weeks_and_quarters(weeks, quarters, args.output)
     print("You can now open '" + args.output + "' in your browser.")
