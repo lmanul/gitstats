@@ -11,5 +11,5 @@ def date_from_key(k):
 
 def quarter_string_from_date_string(s):
     (year, month, day) = s.split("-")
-    quarter = str(1 + ((int(month) - 1) // 4))
+    quarter = str(1 + ((int(month) - 1) // 3))
     return year + "-Q" + str(quarter)
