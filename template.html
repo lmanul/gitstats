@@ -6,10 +6,17 @@
   </head>
   <body>
     <div class="chart"><canvas id="weeks"></canvas></div>
+    <div class="chart"><canvas id="quarters"></canvas></div>
 
     <script>
 
-      var config = {
+      const makeDataset = (label, borderColor, backgroundColor, data, yAxisID) => {
+        return {
+          label, borderColor, backgroundColor, data, yAxisID,
+        };
+      };
+
+      let config = {
         type: 'line',
         options: {
           responsive: true,
@@ -31,7 +38,9 @@
       }
 
       let ctx_weeks = document.getElementById('weeks').getContext('2d');
+      let ctx_quarters = document.getElementById('quarters').getContext('2d');
       let cfg_weeks = JSON.parse(JSON.stringify(config))
+      let cfg_quarters = JSON.parse(JSON.stringify(config))
       let week_labels = [];
       let cls = [];
       let ins = [];
@@ -49,10 +58,11 @@
       cfg_weeks.data = {
         labels: week_labels,
         datasets: [
-          {label: 'Commits',   borderColor: '#ffd300', backgroundColor: '#fff0', data: cls,   yAxisID: 'y2'},
-          {label: '+ & -', borderColor: '#0074dc', backgroundColor: '#fff0', data: lines,   yAxisID: 'y1'},
-          {label: '+',     borderColor: '#26e400', backgroundColor: '#fff0', data: ins,   yAxisID: 'y1'},
-          {label: '-',     borderColor: '#d80000', backgroundColor: '#fff0', data: dels, yAxisID: 'y1'}]};
+          makeDataset('Commits', '#ffd300', '#fff0', cls,   'y2'),
+          makeDataset('+ & -',   '#0074dc', '#fff0', lines, 'y1'),
+          makeDataset('+',       '#26e400', '#fff0', ins,   'y1'),
+          makeDataset('-',       '#d80000', '#fff0', dels,  'y1')]
+        };
       new Chart(ctx_weeks, cfg_weeks)
 
     </script>
