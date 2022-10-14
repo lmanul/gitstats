@@ -8,6 +8,7 @@ from grapher import draw_weeks_and_quarters
 from speleologist import dig
 from util import date_from_key
 from util import date_to_key
+from util import quarter_string_from_date_string
 
 def flatten(l):
     "Flattens a nested list"
@@ -48,7 +49,26 @@ def distill_to_weeks(days):
     return weeks
 
 def distill_to_quarters(days):
+    "Gathers daily data into quarterly"
     quarters = {}
+    day_keys = sorted(list(days.keys()))
+    quarter_key = quarter_string_from_date_string(day_keys[0])
+    commit_count = 0
+    ins_count = 0
+    del_count = 0
+    for day_key in day_keys:
+        new_quarter_key = quarter_string_from_date_string(day_key)
+        if new_quarter_key != quarter_key:
+            quarters[quarter_key] = [commit_count, ins_count, del_count]
+            commit_count = 0
+            ins_count = 0
+            del_count = 0
+            quarter_key = new_quarter_key
+        commit_count += days[day_key][0]
+        ins_count += days[day_key][1]
+        del_count += days[day_key][2]
+    # Close out the last remaining quarter
+    quarters[quarter_key] = [commit_count, ins_count, del_count]
     return quarters
 
 if __name__ == "__main__":

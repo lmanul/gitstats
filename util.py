@@ -8,3 +8,8 @@ def date_to_key(d):
 def date_from_key(k):
     parts = k.split("-")
     return datetime.datetime(int(parts[0]), int(parts[1]), int(parts[2]))
+
+def quarter_string_from_date_string(s):
+    (year, month, day) = s.split("-")
+    quarter = str(1 + ((int(month) - 1) // 4))
+    return year + "-Q" + str(quarter)

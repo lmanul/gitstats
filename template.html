@@ -6,7 +6,9 @@
     <script>const quarters = '{{QUARTERS}}';</script>
   </head>
   <body>
+    <h1>By week</h1>
     <div class="chart"><canvas id="weeks"></canvas></div>
+    <h1>By quarter</h1>
     <div class="chart"><canvas id="quarters"></canvas></div>
 
     <script>
@@ -74,7 +76,7 @@
       data_points = quarters.split('|');
       for (let i = 0, data_point; data_point = data_points[i]; i++) {
         const parts = data_point.split(':');
-        quarters_labels.push(parts[0]);
+        quarter_labels.push(parts[0]);
         cls.push(parts[1]);
         ins.push(parts[2]);
         dels.push(parts[3]);
