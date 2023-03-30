@@ -29,12 +29,12 @@ def close_current_commit(days, day, insertions, deletions, ignore_this_commit):
         return 1
     return 0
 
-def dig(accumulator, author, repo):
+def dig(accumulator, author, repo, branch):
     total_commits = 0
     print(GREEN_FG + "Looking for commits by '" + author + "' in " + repo + RESET)
     orig_dir = os.getcwd()
     os.chdir(repo)
-    os.system("git checkout master")
+    os.system("git checkout " + branch)
     raw = subprocess.check_output(shlex.split("git log --author=" + author + " "
                                               "--stat")).decode("utf8")
     day = None
