@@ -53,16 +53,16 @@ def dig(accumulator, author, repo, branch):
         if "changed" in line and ("insertion" in line or "deletion" in line):
             matches = INS_DEL_PATTERN.match(line)
             if matches:
-                insertions = int(matches[1])
-                deletions = int(matches[2])
+                insertions = int(matches.group(1))
+                deletions = int(matches.group(2))
             else:
                 matches = INS_PATTERN.match(line)
                 if matches:
-                    insertions = int(matches[1])
+                    insertions = int(matches.group(1))
                     deletions = 0
                 else:
                     matches = DEL_PATTERN.match(line)
-                    deletions = int(matches[1])
+                    deletions = int(matches.group(1))
                     insertions = 0
 
         if line.startswith("commit"):
