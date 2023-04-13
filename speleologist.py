@@ -33,6 +33,9 @@ def dig(accumulator, author, repo, branch):
     total_commits = 0
     print(GREEN_FG + "Looking for commits by '" + author + "' in " + repo + RESET)
     orig_dir = os.getcwd()
+    if not os.path.exists(repo):
+        print("Sorry, '" + repo + "' doesn't seem to exist. Skipping.")
+        return
     os.chdir(repo)
     os.system("git checkout " + branch)
     raw = subprocess.check_output(shlex.split("git log --author=" + author + " "
