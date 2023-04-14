@@ -6,7 +6,7 @@ import re
 import shlex
 import subprocess
 
-from util import date_to_key
+from util import date_to_key, get_git_branches
 
 INS_DEL_PATTERN = re.compile(r".*changed, (\d+) insertion?.*, (\d+) deletion.*")
 INS_PATTERN = re.compile(r".*changed, (\d+) insertion?.*")
@@ -37,6 +37,9 @@ def dig(accumulator, author, repo, branch):
         print("Sorry, '" + repo + "' doesn't seem to exist. Skipping.")
         return
     os.chdir(repo)
+    branches = get_git_branches()
+    if branch not in branches:
+        print("'" + branch + "' doesn't seem to exist. Skipping.")
     os.system("git checkout " + branch)
     raw = subprocess.check_output(shlex.split("git log --author=" + author + " "
                                               "--stat")).decode("utf8")
