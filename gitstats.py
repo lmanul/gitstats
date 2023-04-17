@@ -75,9 +75,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--author", dest="author", action="append",
                         nargs="+", help="The author(s) to look for")
-    parser.add_argument("-b", "--branch", dest="branch", action="store",
-                        default="master", nargs="?",
-                        help="The branch (default is 'master')")
+    parser.add_argument("-b", "--branch", dest="branches", action="append",
+                        nargs="*", help="The branch(es) (default is 'master')")
     parser.add_argument("-r", "--repo", dest="repos", action="append",
                         nargs="+", help="The repository(ies) where to look")
     parser.add_argument("-o", "--output", dest="output", action="store",
@@ -93,13 +92,17 @@ if __name__ == "__main__":
         print("Please give me at least one --repo")
         SHOULD_ABORT = True
 
+    if not args.branches:
+        args.branches = [["master"]]
+
     if SHOULD_ABORT:
         sys.exit(1)
 
     accumulator = {}
     for author in flatten(args.author):
         for repo in flatten(args.repos):
-            dig(accumulator, author, repo, args.branch)
+            for branch in flatten(args.branches):
+                dig(accumulator, author, repo, branch)
     if not accumulator:
         print("Sorry, I did not find any corresponding commits")
         sys.exit(0)

@@ -31,7 +31,10 @@ def close_current_commit(days, day, insertions, deletions, ignore_this_commit):
 
 def dig(accumulator, author, repo, branch):
     total_commits = 0
-    print(GREEN_FG + "Looking for commits by '" + author + "' in " + repo + RESET)
+    print("" + GREEN_FG + ""
+          "Looking for commits by '" + author + "' "
+          "in " + repo + ":" + branch + ""
+          "" + RESET)
     orig_dir = os.getcwd()
     if not os.path.exists(repo):
         print("Sorry, '" + repo + "' doesn't seem to exist. Skipping.")
