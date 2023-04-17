@@ -40,6 +40,7 @@ def dig(accumulator, author, repo, branch):
     branches = get_git_branches()
     if branch not in branches:
         print("'" + branch + "' doesn't seem to exist. Skipping.")
+        return
     os.system("git checkout " + branch)
     raw = subprocess.check_output(shlex.split("git log --author=" + author + " "
                                               "--stat")).decode("utf8")
