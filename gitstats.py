@@ -2,6 +2,7 @@
 
 import argparse
 import datetime
+import os
 import sys
 
 from grapher import draw_weeks_and_quarters
@@ -84,6 +85,7 @@ if __name__ == "__main__":
                         default="stats.html")
     args = parser.parse_args()
 
+    ORIG_DIR = os.getcwd()
     SHOULD_ABORT = False
     if not args.author:
         print("Please give me at least one --author")
@@ -108,5 +110,6 @@ if __name__ == "__main__":
         sys.exit(0)
     weeks = distill_to_weeks(accumulator)
     quarters = distill_to_quarters(accumulator)
+    os.chdir(ORIG_DIR)
     draw_weeks_and_quarters(weeks, quarters, args.output)
     print("You can now open '" + args.output + "' in your browser.")
