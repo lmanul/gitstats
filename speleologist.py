@@ -17,9 +17,11 @@ GREEN_FG =  '\033[32m'
 CYAN_FG = '\033[36m'
 RESET = '\033[m' # reset to the defaults
 
-def close_current_commit(days, day, insertions, deletions, ignore_this_commit):
+def close_current_commit(days, all_messages, day, insertions, deletions, message,
+        ignore_this_commit):
     if ignore_this_commit:
         return 0
+    all_messages.append(message)
     if day is not None:
         if day not in days:
             days[day] = [0, 0, 0]
@@ -31,6 +33,7 @@ def close_current_commit(days, day, insertions, deletions, ignore_this_commit):
 
 def dig(accumulator, author, repo, branch):
     total_commits = 0
+    all_messages = []
     print("" + GREEN_FG + ""
           "Looking for commits by '" + author + "' "
           "in " + repo + ":" + branch + ""
@@ -50,8 +53,13 @@ def dig(accumulator, author, repo, branch):
     day = None
     insertions = 0
     deletions = 0
+    commit_message = ""
     ignore_this_commit = False
     for line in raw.split("\n"):
+        # Only keep one line of commit message for each commit
+        if line.startswith("    ") and line.strip() != "" and commit_message == "":
+            commit_message = line[4:]
+
         line = line.strip()
         if line.startswith("Date:"):
             date = datetime.datetime.strptime(line[8:],
@@ -80,8 +88,12 @@ def dig(accumulator, author, repo, branch):
                 ignore_this_commit = False
                 continue
             total_commits += close_current_commit(
-                accumulator, day, insertions, deletions, ignore_this_commit)
-    total_commits += close_current_commit(accumulator, day, insertions, deletions,
-                                          ignore_this_commit)
+                accumulator, all_messages, day, insertions, deletions,
+                commit_message, ignore_this_commit)
+            commit_message = ""
+    total_commits += close_current_commit(accumulator, all_messages, day,
+        insertions, deletions, commit_message, ignore_this_commit)
     print(CYAN_FG + "Found " + str(total_commits) + " commits." + RESET)
+    if total_commits > 0:
+        print("\n\t* ".join(all_messages))
     os.chdir(orig_dir)
